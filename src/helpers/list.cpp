@@ -22,9 +22,11 @@ namespace helpers::list {
 
 using CommandList = std::vector<std::string>;
 
+bool verbose {};
+
 namespace internal {
     std::filesystem::path COMMAND_LIST {std::filesystem::path {SYSCONFDIR}/"list"};
-    int changeList(const CommandList& newList, bool verbose) {
+    int changeList(const CommandList& newList) {
         std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
         if (verbose) {
             std::printf("Opening list\n"); 
@@ -46,7 +48,7 @@ namespace internal {
     }
 }
 
-std::optional<CommandList> getList(bool verbose) {
+std::optional<CommandList> getList() {
     std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
     if (verbose) {
         std::printf("Opening list\n"); 
@@ -69,9 +71,9 @@ std::optional<CommandList> getList(bool verbose) {
     std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
 
-int listIncludes(const std::string& item, bool verbose) {
+int listIncludes(const std::string& item) {
     std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
-    auto list {getList(verbose)};
+    auto list {getList()};
     if (!list) {
         return -1;
     }
@@ -85,13 +87,13 @@ int listIncludes(const std::string& item, bool verbose) {
     return 0;
     std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
-int addToList(const std::string& item, bool verbose) {
+int addToList(const std::string& item) {
     std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
     if (std::find(item.begin(), item.end(), ' ') != item.end()) {
         std::fprintf(stderr, "\033[1;31mError:\033[0m Item \"%s\" contains spaces\n", item.c_str());
         return 1;
     }
-    int listIncludesItem {listIncludes(item, verbose)};
+    int listIncludesItem {listIncludes(item)};
     if (listIncludesItem == -1) {
         return -1;
     }
@@ -100,13 +102,13 @@ int addToList(const std::string& item, bool verbose) {
         return 1;
     }
     
-    auto list {getList(verbose)};
+    auto list {getList()};
     if (!list) {
         return -1;
     }
     list->push_back(item);
 
-    if (internal::changeList(*list, verbose) != 0) {
+    if (internal::changeList(*list) != 0) {
         return -1; 
     }
     if (verbose) {
@@ -115,9 +117,9 @@ int addToList(const std::string& item, bool verbose) {
     return 0;
     std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
-int removeFromList(const std::string& item, bool verbose) {
+int removeFromList(const std::string& item) {
     std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
-    int listIncludesItem {listIncludes(item, verbose)};
+    int listIncludesItem {listIncludes(item)};
     if (listIncludesItem == -1) {
         return -1;
     }
@@ -126,13 +128,13 @@ int removeFromList(const std::string& item, bool verbose) {
         return 1;
     }
     
-    auto list {getList(verbose)};
+    auto list {getList()};
     if (!list) { 
         return -1;
     }
     list->erase(std::remove(list->begin(), list->end(), item), list->end());
 
-    if (internal::changeList(*list, verbose) != 0) {
+    if (internal::changeList(*list) != 0) {
         return -1; 
     }
     if (verbose) {
