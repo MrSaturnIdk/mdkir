@@ -14,9 +14,10 @@ int main() {
     std::int64_t time {std::chrono::steady_clock::now().time_since_epoch().count()};
     char buffer[32] {};
     std::snprintf(buffer, sizeof(buffer), "testList%lld.log", static_cast<long long>(time));
+    helpers::list::verbose = true;
     helpers::list::internal::COMMAND_LIST = std::filesystem::path {SYSCONFDIR}/buffer;
     // This will force create an empty file
-    if (helpers::list::internal::changeList({}, true) == -1) {
+    if (helpers::list::internal::changeList({}) == -1) {
         return 2;
     }
 
@@ -30,12 +31,12 @@ int main() {
     };
     /// Does it add and error on invalids?
     for (const std::string& item : tempList) {
-        if (helpers::list::addToList(item, true) == -1) {
+        if (helpers::list::addToList(item) == -1) {
             return 2;
         }
     }
 
-    auto list {helpers::list::getList(true)};
+    auto list {helpers::list::getList()};
     if (!list) {
         return 2;
     }
@@ -50,12 +51,12 @@ int main() {
         "bar"
     };
     for (const std::string& item : tempListTwo) {
-        if (helpers::list::removeFromList(item, true) == -1) {
+        if (helpers::list::removeFromList(item) == -1) {
             return 2;
         }
     }
 
-    auto listTwo {helpers::list::getList(true)};
+    auto listTwo {helpers::list::getList()};
     if (!listTwo) {
         return 2;
     }
