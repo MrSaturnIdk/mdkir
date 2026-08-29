@@ -27,9 +27,9 @@ bool verbose {};
 namespace internal {
     std::filesystem::path COMMAND_LIST {std::filesystem::path {SYSCONFDIR}/"list"};
     int changeList(const CommandList& newList) {
-        std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
         if (verbose) {
             std::printf("Opening list\n");
+            std::fflush(stdout);
         }
         std::ofstream list {COMMAND_LIST};
         if (!list.is_open()) {
@@ -43,19 +43,19 @@ namespace internal {
 
         if (verbose) {
             std::printf("Writing to list\n");
+            std::fflush(stdout);
         }
         for (const std::string& item : newList) {
             list << item << '\n';
         }
         return 0;
-        std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
     }
 }
 
 std::optional<CommandList> getList() {
-    std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
     if (verbose) {
         std::printf("Opening list\n");
+        std::fflush(stdout);
     }
     std::ifstream list {internal::COMMAND_LIST};
     if (!list.is_open()) {
@@ -68,6 +68,7 @@ std::optional<CommandList> getList() {
     }
     if (verbose) {
         std::printf("Getting contents of list\n");
+        std::fflush(stdout);
     }
 
     std::string item {};
@@ -76,11 +77,9 @@ std::optional<CommandList> getList() {
         items.push_back(item);
     }
     return items;
-    std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
 
 int listIncludes(const std::string& item) {
-    std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
     auto list {getList()};
     if (!list) {
         return -1;
@@ -88,15 +87,14 @@ int listIncludes(const std::string& item) {
 
     if (verbose) {
         std::printf("Checking if list contains \"%s\"\n", item.c_str());
+        std::fflush(stdout);
     }
     if (std::find(list->begin(), list->end(), item) != list->end()) {
         return 1;
     }
     return 0;
-    std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
 int addToList(const std::string& item) {
-    std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
     if (std::find(item.begin(), item.end(), ' ') != item.end()) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
@@ -131,12 +129,11 @@ int addToList(const std::string& item) {
     }
     if (verbose) {
         std::printf("Item \"%s\" added successfully\n", item.c_str());
+        std::fflush(stdout);
     }
     return 0;
-    std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
 int removeFromList(const std::string& item) {
-    std::setvbuf(stdout, nullptr, _IONBF, BUFSIZ);
     int listIncludesItem {listIncludes(item)};
     if (listIncludesItem == -1) {
         return -1;
@@ -162,9 +159,9 @@ int removeFromList(const std::string& item) {
     }
     if (verbose) {
         std::printf("Item \"%s\" removed successfully\n", item.c_str());
+        std::fflush(stdout);
     }
     return 0;
-    std::setvbuf(stdout, nullptr, isatty(STDOUT_FILENO) ? _IOLBF : _IOFBF, BUFSIZ);
 }
 
 }
