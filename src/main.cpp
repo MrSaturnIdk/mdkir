@@ -34,7 +34,8 @@ int main(int argc, char* argv[]) {
                 ? "\033[1;31mError:\033[0m No arguments given\n"
                   "See \"%s --help\" for details\n"
                 : "Error: No arguments given\n"
-                  "See \"%s --help\" for details\n"
+                  "See \"%s --help\" for details\n",
+                argv[0]
             );
         return 1;
     }
@@ -233,20 +234,17 @@ int main(int argc, char* argv[]) {
                     expectedArgumentParameter = "";
                     return 0;
                 }
-
-                default: {
-                    std::fprintf(stderr,
-                        isatty(STDERR_FILENO)
-                            ? "\033[1;31mError:\033[0m Parameter for argument \"%s\" not given\n"
-                              "See \"%s --help\" for details\n"
-                            : "Error: Parameter for argument \"%s\" not given\n"
-                              "See \"%s --help\" for details\n",
-                        argv[argc - 1]
-                        argv[0]
-                    );
-                    return 1;
-                }
             }
         }
     }
+    std::fprintf(stderr,
+        isatty(STDERR_FILENO)
+            ? "\033[1;31mError:\033[0m Parameter for argument \"%s\" not given\n"
+              "See \"%s --help\" for details\n"
+            : "Error: Parameter for argument \"%s\" not given\n"
+              "See \"%s --help\" for details\n",
+        argv[argc - 1],
+        argv[0]
+    );
+    return 1;
 }
