@@ -86,4 +86,14 @@ add_dependencies(mdkirtests mdkirlisttests)
 install(TARGETS mdkir
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir" DESTINATION ${CMAKE_INSTALL_SYSCONFDIR})
+install(CODE "
+    if(EXISTS \"${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir\")
+        message(STATUS \"Up-to-date: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir\")
+    else()
+        file(INSTALL
+            DESTINATION \"${CMAKE_INSTALL_FULL_SYSCONFDIR}\"
+            TYPE DIRECTORY
+            FILES \"${CMAKE_BINARY_DIR}/tmp_install/mdkir\"
+        )
+    endif()
+")
