@@ -28,12 +28,12 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    if (argc == 1) {
+    if (argc == 1 || (argc == 2 && std::string {argv[1]} == "--verbose")) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
-                ? "\033[1;31mError:\033[0m No arguments given\n"
+                ? "\033[1;31mError:\033[0m No commands given\n"
                   "See \"%s --help\" for details\n"
-                : "Error: No arguments given\n"
+                : "Error: No commanda given\n"
                   "See \"%s --help\" for details\n",
                 argv[0]
             );
