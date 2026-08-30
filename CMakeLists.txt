@@ -20,14 +20,14 @@ endif()
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "CMake build type (what do you think)" FORCE)
 endif()
-message(STATUS "CMAKE_BUILD_TYPE is set to \"${CMAKE_BUILD_TYPE}\"")
+message(STATUS "CMAKE_BUILD_TYPE is set to: ${CMAKE_BUILD_TYPE}")
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     message(WARNING "Note CMAKE_BUILD_TYPE being set to \"Debug\" will enable developer options.")
 endif()
 if(NOT CALL_NAME)
     set(CALL_NAME mdkir CACHE STRING "What its called by to make it configure and not insult" FORCE)
 endif()
-message(STATUS "CALL_NAME is set to \"${CALL_NAME}\"")
+message(STATUS "CALL_NAME is set to: ${CALL_NAME}")
 
 add_library(mdkirhelpers STATIC
     src/helpers/list.cpp
@@ -38,19 +38,19 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug)
         SYSCONFDIR="${CMAKE_BINARY_DIR}/fake_etc"
     )
 
-    message(STATUS  "Installing symlinks to \"${CMAKE_BINARY_DIR}/fake_bin\"")
-    message(STATUS "Writing config to \"${CMAKE_BINARY_DIR}/fake_etc\"")
+    message(STATUS  "Installing symlinks to: ${CMAKE_BINARY_DIR}/fake_bin")
+    message(STATUS "Writing config to: ${CMAKE_BINARY_DIR}/fake_etc")
 
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_bin")
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_etc")
     file(TOUCH "${CMAKE_BINARY_DIR}/fake_etc/list")
 else()
     target_compile_definitions(mdkirhelpers PUBLIC
-        SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}"
+        SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir"
     )
 
-    message(STATUS "Installing symlinks to \"${CMAKE_INSTALL_FULL_BINDIR}\"")
-    message(STATUS "Writing config to \"${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir\"")
+    message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_FULL_BINDIR}")
+    message(STATUS "Writing config to: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir")
 
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir")
     file(TOUCH "${CMAKE_BINARY_DIR}/tmp_install/mdkir/list")
