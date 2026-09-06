@@ -10,9 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-enable_testing()
 include(GNUInstallDirs)
-add_custom_target(mdkirtests)
 
 if (WIN32)
     message(FATAL_ERROR "This is made for Unix, not Windows")
@@ -29,36 +27,11 @@ if(NOT CALL_NAME)
 endif()
 message(STATUS "CALL_NAME is set to: ${CALL_NAME}")
 
-add_library(mdkirhelpers STATIC
-    src/helpers/list.cpp
-)
-target_include_directories(mdkirhelpers PUBLIC include)
-if (CMAKE_BUILD_TYPE STREQUAL Debug)
-    target_compile_definitions(mdkirhelpers PUBLIC
-        SYSCONFDIR="${CMAKE_BINARY_DIR}/fake_etc"
-    )
-
-    message(STATUS  "Installing symlinks to: ${CMAKE_BINARY_DIR}/fake_bin")
-    message(STATUS "Writing config to: ${CMAKE_BINARY_DIR}/fake_etc")
-
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_bin")
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_etc")
-    file(TOUCH "${CMAKE_BINARY_DIR}/fake_etc/list")
-else()
-    target_compile_definitions(mdkirhelpers PUBLIC
-        SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir"
-    )
-
-    message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_FULL_BINDIR}")
-    message(STATUS "Writing config to: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir")
-
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir")
-    file(TOUCH "${CMAKE_BINARY_DIR}/tmp_install/mdkir/list")
-endif()
-
 add_executable(mdkir
+    src/helpers/list.cpp
     src/main.cpp
 )
+target_include_directories(mdkir PRIVATE include)
 target_compile_definitions(mdkir PRIVATE
     CALL_NAME="${CALL_NAME}"
     HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
@@ -68,20 +41,29 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug)
     target_compile_definitions(mdkir PRIVATE
         BINDIR="${CMAKE_BINARY_DIR}/fake_bin"
         NEEDS_SUDO=false
+        SYSCONFDIR="${CMAKE_BINARY_DIR}/fake_etc"
     )
+    message(STATUS  "Installing symlinks to: ${CMAKE_BINARY_DIR}/fake_bin")
+    message(STATUS "Writing config to: ${CMAKE_BINARY_DIR}/fake_etc")
+
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_bin")
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_etc")
+    file(TOUCH "${CMAKE_BINARY_DIR}/fake_etc/list")
+
     message(AUTHOR_WARNING "Due to my laziness, you will have to manually copy mdkir into fake_bin to test it.")
 else()
     target_compile_definitions(mdkir PRIVATE
         BINDIR="${CMAKE_INSTALL_FULL_BINDIR}"
         NEEDS_SUDO=true
+        SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir"
     )
-endif()
-target_link_libraries(mdkir mdkirhelpers)
 
-add_executable(mdkirlisttests tests/list.cpp)
-target_link_libraries(mdkirlisttests mdkirhelpers)
-add_test(NAME ListTest COMMAND mdkirlisttests)
-add_dependencies(mdkirtests mdkirlisttests)
+    message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_FULL_BINDIR}")
+    message(STATUS "Writing config to: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir")
+
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir")
+    file(TOUCH "${CMAKE_BINARY_DIR}/tmp_install/mdkir/list")
+endif()
 
 install(TARGETS mdkir
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
