@@ -9,7 +9,7 @@ cd mdkir
 mkdir build
 cd build
 cmake ..
-cmake --build . --target mdkir
+cmake --build .
 sudo cmake --install .
 ```
 ## Usage
