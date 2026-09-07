@@ -6,6 +6,7 @@
  * 1 = Also success, for usage in an if statement, otherwise bad input
  */
 
+#include "ansicolors.h"
 #include "helpers/list.hpp"
 
 #include <unistd.h>
@@ -35,7 +36,7 @@ namespace internal {
         if (!list.is_open()) {
             std::fprintf(stderr,
                 isatty(STDERR_FILENO)
-                    ? "\033[1;31mError:\033[0m Failed to open command list\n"
+                    ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Failed to open command list\n"
                     : "Error: Failed to open command list\n"
             );
             return -1;
@@ -61,7 +62,7 @@ std::optional<CommandList> getList() {
     if (!list.is_open()) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
-                ? "\033[1;31mError:\033[0m Failed to open command list\n"
+                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Failed to open command list\n"
                 : "Error: Failed to open command list\n"
         );
         return std::nullopt;
@@ -98,7 +99,7 @@ int addToList(const std::string& item) {
     if (std::find(item.begin(), item.end(), ' ') != item.end()) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
-                ? "\033[1;31mError:\033[0m Item \"%s\" contains spaces\n"
+                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Item \"%s\" contains spaces\n"
                 : "Error: Item \"%s\" contains spaces\n",
             item.c_str()
         );
@@ -111,7 +112,7 @@ int addToList(const std::string& item) {
     if (listIncludesItem == 1) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
-                ? "\033[1;31mError:\033[0m List already includes \"%s\"\n"
+                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " List already includes \"%s\"\n"
                 : "Error: List already includes \"%s\"\n",
             item.c_str()
         );
@@ -141,7 +142,7 @@ int removeFromList(const std::string& item) {
     if (listIncludesItem == 0) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
-                ? "\033[1;31mError:\033[0m List does not contain \"%s\"\n"
+                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " List does not contain \"%s\"\n"
                 : "Error: List does not contain \"%s\"\n",
             item.c_str()
         );

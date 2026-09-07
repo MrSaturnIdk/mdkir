@@ -2,6 +2,7 @@
  * Both config and insult
  */
 
+#include "ansicolors.h"
 #include "helpers/list.hpp"
 
 #include <unistd.h>
@@ -22,7 +23,7 @@ int main(int argc, char* argv[]) {
     std::string callName {std::filesystem::path {argv[0]}.filename().string()};
     if (callName != CALL_NAME) {
         std::printf(isatty(STDOUT_FILENO)
-            ? "That's \033[1mnot\033[0m how it's spelled\n"
+            ? "That's \033[1mnot" ANSI_RESET " how it's spelled\n"
             : "That's not how it's spelled\n"
         );
         return 0;
@@ -31,7 +32,7 @@ int main(int argc, char* argv[]) {
     if (argc == 1 || (argc == 2 && std::string {argv[1]} == "--verbose")) {
         std::fprintf(stderr,
             isatty(STDERR_FILENO)
-                ? "\033[1;31mError:\033[0m No commands given\n"
+                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " No commands given\n"
                   "See \"%s --help\" for details\n"
                 : "Error: No commanda given\n"
                   "See \"%s --help\" for details\n",
@@ -117,7 +118,7 @@ int main(int argc, char* argv[]) {
                 default: {
                     std::fprintf(stderr, "%s%s%s%s%s",
                         isatty(STDERR_FILENO)
-                            ? "\033[1;31mError:\033[0m Unrecognized argument \""
+                            ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Unrecognized argument \""
                             : "Error: Unrecognized argument \"",
                         argv[i], "\"\n"
                         "See \"", argv[0], " --help\" for details\n"
@@ -133,7 +134,7 @@ int main(int argc, char* argv[]) {
                     if (NEEDS_SUDO && getuid() != 0) {
                         std::fprintf(stderr,
                             isatty(STDERR_FILENO)
-                                ? "\033[1;31mError:\033[0m No permissions\n"
+                                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " No permissions\n"
                                 : "Error: No permissions\n"
                         );
                         return 1;
@@ -162,7 +163,7 @@ int main(int argc, char* argv[]) {
                     if (ec) {
                         std::fprintf(stderr,
                             isatty(STDERR_FILENO)
-                                ? "\033[1;31mError:\033[0m Couldn't make symlink %s/%s\n"
+                                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Couldn't make symlink %s/%s\n"
                                   "Associated message: \"%s\" (code %d)\n"
                                 : "Error: Couldn't make symlink %s/%s\n"
                                   "Associated message: \"%s\" (code %d)\n",
@@ -186,7 +187,7 @@ int main(int argc, char* argv[]) {
                     if (NEEDS_SUDO && getuid() != 0) {
                         std::fprintf(stderr,
                             isatty(STDERR_FILENO)
-                                ? "\033[1;31mError:\033[0m No permissions\n"
+                                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " No permissions\n"
                                 : "Error: No permissions\n"
                         );
                         return 1;
@@ -214,7 +215,7 @@ int main(int argc, char* argv[]) {
                     if (ec) {
                         std::fprintf(stderr,
                             isatty(STDERR_FILENO)
-                                ? "\033[1;31mError:\033[0m Couldn't remove symlink %s/%s\n"
+                                ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Couldn't remove symlink %s/%s\n"
                                   "Associated message: \"%s\" (code %d)\n"
                                 : "Error: Couldn't remove symlink %s/%s\n"
                                   "Associated message: \"%s\" (code %d)\n",
@@ -239,7 +240,7 @@ int main(int argc, char* argv[]) {
     }
     std::fprintf(stderr,
         isatty(STDERR_FILENO)
-            ? "\033[1;31mError:\033[0m Parameter for argument \"%s\" not given\n"
+            ? ANSI_BOLD ANSI_RED "Error:" ANSI_RESET " Parameter for argument \"%s\" not given\n"
               "See \"%s --help\" for details\n"
             : "Error: Parameter for argument \"%s\" not given\n"
               "See \"%s --help\" for details\n",
