@@ -12,6 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(GNUInstallDirs)
 
+message(STATUS "Project version is: ${PROJECT_VERSION}")
 if (WIN32)
     message(FATAL_ERROR "This is made for Unix, not Windows")
 endif()
