@@ -44,6 +44,6 @@ I am **not** going to make myself deal with the Windows filesystem, so port it y
 
 Seriously. The source code is right there.
 ## License & Copyright
-Copyright © 2026 MrSaturnIdk.
+Copyright (c) 2026 MrSaturnIdk.
 
 Licensed under the [AGPL-3.0-or-later](LICENSE).

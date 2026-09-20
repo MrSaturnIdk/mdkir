@@ -3,12 +3,12 @@ project(mdkir
     VERSION 1.0.0
     DESCRIPTION "The Unix (MacOS/Linux) program that insults you for misspelling a command"
     HOMEPAGE_URL "https://github.com/MrSaturnIdk/mdkir"
-    LANGUAGES CXX
+    LANGUAGES C
 )
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
 include(GNUInstallDirs)
 
@@ -21,7 +21,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "CMAKE_BUILD_TYPE is set to: ${CMAKE_BUILD_TYPE}")
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
-    message(WARNING "Note CMAKE_BUILD_TYPE being set to \"Debug\" will enable developer options.")
+    message(WARNING "Note CMAKE_BUILD_TYPE being set to 'Debug' will enable developer options.")
 endif()
 if(NOT CALL_NAME)
     set(CALL_NAME mdkir CACHE STRING "What its called by to make it configure and not insult" FORCE)
@@ -29,8 +29,9 @@ endif()
 message(STATUS "CALL_NAME is set to: ${CALL_NAME}")
 
 add_executable(mdkir
-    src/helpers/list.cpp
-    src/main.cpp
+    src/array.c
+    src/list.c
+    src/main.c
 )
 target_include_directories(mdkir PRIVATE include)
 target_compile_definitions(mdkir PRIVATE
@@ -41,7 +42,7 @@ target_compile_definitions(mdkir PRIVATE
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     target_compile_definitions(mdkir PRIVATE
         BINDIR="${CMAKE_BINARY_DIR}/fake_bin"
-        NEEDS_SUDO=false
+        NEEDS_SUDO=0
         SYSCONFDIR="${CMAKE_BINARY_DIR}/fake_etc"
     )
     message(STATUS  "Installing symlinks to: ${CMAKE_BINARY_DIR}/fake_bin")
@@ -55,7 +56,7 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug)
 else()
     target_compile_definitions(mdkir PRIVATE
         BINDIR="${CMAKE_INSTALL_FULL_BINDIR}"
-        NEEDS_SUDO=true
+        NEEDS_SUDO=1
         SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir"
     )
 
