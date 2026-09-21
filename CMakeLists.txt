@@ -20,9 +20,10 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "CMake build type (what do you think)" FORCE)
 endif()
 message(STATUS "CMAKE_BUILD_TYPE is set to: ${CMAKE_BUILD_TYPE}")
-if (CMAKE_BUILD_TYPE STREQUAL Debug)
-    message(WARNING "Note CMAKE_BUILD_TYPE being set to 'Debug' will enable developer options.")
+if(NOT NEEDS_SUDO)
+    set(NEEDS_SUDO 1 CACHE STRING "If you need sudo to edit commands" FORCE)
 endif()
+message(STATUS "NEEDS_SUDO is set to: ${NEEDS_SUDO}")
 if(NOT CALL_NAME)
     set(CALL_NAME mdkir CACHE STRING "What its called by to make it configure and not insult" FORCE)
 endif()
@@ -38,34 +39,16 @@ target_compile_definitions(mdkir PRIVATE
     CALL_NAME="${CALL_NAME}"
     HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
     PROJECT_VER="${PROJECT_VERSION}"
+    BINDIR="${CMAKE_INSTALL_FULL_BINDIR}"
+    NEEDS_SUDO="${NEEDS_SUDO}"
+    SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir"
 )
-if (CMAKE_BUILD_TYPE STREQUAL Debug)
-    target_compile_definitions(mdkir PRIVATE
-        BINDIR="${CMAKE_BINARY_DIR}/fake_bin"
-        NEEDS_SUDO=0
-        SYSCONFDIR="${CMAKE_BINARY_DIR}/fake_etc"
-    )
-    message(STATUS  "Installing symlinks to: ${CMAKE_BINARY_DIR}/fake_bin")
-    message(STATUS "Writing config to: ${CMAKE_BINARY_DIR}/fake_etc")
 
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_bin")
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/fake_etc")
-    file(TOUCH "${CMAKE_BINARY_DIR}/fake_etc/list")
+message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_FULL_BINDIR}")
+message(STATUS "Writing config to: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir")
 
-    message(AUTHOR_WARNING "Due to my laziness, you will have to manually copy mdkir into fake_bin to test it.")
-else()
-    target_compile_definitions(mdkir PRIVATE
-        BINDIR="${CMAKE_INSTALL_FULL_BINDIR}"
-        NEEDS_SUDO=1
-        SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir"
-    )
-
-    message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_FULL_BINDIR}")
-    message(STATUS "Writing config to: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir")
-
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir")
-    file(TOUCH "${CMAKE_BINARY_DIR}/tmp_install/mdkir/list")
-endif()
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir")
+file(TOUCH "${CMAKE_BINARY_DIR}/tmp_install/mdkir/list")
 
 install(TARGETS mdkir
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
