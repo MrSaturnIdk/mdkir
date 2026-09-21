@@ -17,12 +17,13 @@ Just run
 ```sh
 mdkir --help
 ```
+## Configure time customizations
+- `-DCALL_NAME=mdkir`: Since mdkir relies on how its called to know if it should insult or configure,
+you must pass a custom name if you wish to rename it.
+- `-DNEEDS_SUDO=1`: If you need sudo to edit the commands, 0 for false, non-zero (or any valid expression that, when
+piped into a C if, evaluates to true) for true.
 ## How it works
 Just makes a symlink to `/usr/local/bin/mkdir`
-> [!WARNING]
-> If you wish to rename `mdkir`, you will have to pass `-DCALL_NAME="(insert name)"` to CMake.
->
-> It depends on how its called to calculate whether or not to insult.
 ## Why this is not getting a Windows port anytime soon
 2 things.
 
