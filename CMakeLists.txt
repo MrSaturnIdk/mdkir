@@ -47,20 +47,15 @@ target_compile_definitions(mdkir PRIVATE
 message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_FULL_BINDIR}")
 message(STATUS "Writing config to: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir")
 
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp_install/mdkir")
-file(TOUCH "${CMAKE_BINARY_DIR}/tmp_install/mdkir/list")
-
 install(TARGETS mdkir
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(CODE "
-    if(EXISTS \"${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir\")
-        message(STATUS \"Up-to-date: ${CMAKE_INSTALL_FULL_SYSCONFDIR}/mdkir\")
+    if(EXISTS \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir\")
+        message(STATUS \"Up-to-date: \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir\")
     else()
-        file(INSTALL
-            DESTINATION \"${CMAKE_INSTALL_FULL_SYSCONFDIR}\"
-            TYPE DIRECTORY
-            FILES \"${CMAKE_BINARY_DIR}/tmp_install/mdkir\"
-        )
+        file(MAKE_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir\")
+        file(TOUCH \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir/list\")
+        message(STATUS \"Installing: \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir\")
     endif()
 ")
