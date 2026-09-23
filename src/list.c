@@ -137,7 +137,7 @@ CommandList getList(void) {
         arrayList[i] = "";
     }
 
-    int i = 0;
+    intmax_t i = 0;
     for (char* item = strtok(items, "\n"); item; item = strtok(NULL, "\n")) {
         arrayList[i++] = item;
     }
