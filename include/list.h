@@ -5,6 +5,7 @@
 
 typedef struct {
     char** list;
+    char* allocated;
     intmax_t len;
 } CommandList;
 

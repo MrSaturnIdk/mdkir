@@ -64,7 +64,7 @@ static int changeList(CommandList newList) {
 
 /// Public
 CommandList getList(void) {
-    CommandList list = {.list = NULL, .len = 0};
+    CommandList list = {.list = NULL, .allocated = NULL, .len = 0};
 
     // Open
     if (verbose) {
@@ -143,6 +143,7 @@ CommandList getList(void) {
     }
     list.list = arrayList;
     list.len = i;
+    list.allocated = items;
     return list;
 }
 
@@ -156,11 +157,11 @@ int listIncludes(const char* target) {
         fflush(stdout);
     }
     if (findIndexOfString((const char**)list.list, 4096, target) != -1) {
-        free(*list.list);
+        free(list.allocated);
         free(list.list);
         return 1;
     }
-    free(*list.list);
+    free(list.allocated);
     free(list.list);
     return 0;
 }
@@ -207,7 +208,7 @@ int addToList(char* item) {
 
     int changed = changeList(list);
     if (changed) {
-        free(*list.list);
+        free(list.allocated);
         free(list.list);
         return changed;
     }
@@ -215,7 +216,7 @@ int addToList(char* item) {
         printf("Item '%s' added successfully\n", item);
         fflush(stdout);
     }
-    free(*list.list);
+    free(list.allocated);
     free(list.list);
     return 0;
 }
@@ -249,7 +250,7 @@ int removeFromList(const char* item) {
 
     int changed = changeList(list);
     if (changed) {
-        free(*list.list);
+        free(list.allocated);
         free(list.list);
         return changed;
     }
@@ -257,7 +258,7 @@ int removeFromList(const char* item) {
         printf("Item '%s' removed successfully\n", item);
         fflush(stdout);
     }
-    free(*list.list);
+    free(list.allocated);
     free(list.list);
     return 0;
 }

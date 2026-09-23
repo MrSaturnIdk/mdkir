@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
                     for (int i = 0; i < list.len; ++i) {
                         printf("%s\n", list.list[i]);
                     }
-                    free(*list.list);
+                    free(list.allocated);
                     free(list.list);
                     return 0;
                 }
