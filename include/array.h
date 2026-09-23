@@ -5,6 +5,6 @@
 
 #include <stddef.h>
 
-int findIndexOfString(const char *restrict array[], size_t len, const char *restrict item);
+int findIndexOfString(const char* restrict array[], size_t len, const char* restrict item);
 
 #endif
