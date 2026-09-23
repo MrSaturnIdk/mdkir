@@ -207,12 +207,16 @@ int addToList(char* item) {
 
     int changed = changeList(list);
     if (changed) {
+        free(*list.list);
+        free(list.list);
         return changed;
     }
     if (verbose) {
         printf("Item '%s' added successfully\n", item);
         fflush(stdout);
     }
+    free(*list.list);
+    free(list.list);
     return 0;
 }
 int removeFromList(const char* item) {
@@ -245,11 +249,15 @@ int removeFromList(const char* item) {
 
     int changed = changeList(list);
     if (changed) {
+        free(*list.list);
+        free(list.list);
         return changed;
     }
     if (verbose) {
         printf("Item '%s' removed successfully\n", item);
         fflush(stdout);
     }
+    free(*list.list);
+    free(list.list);
     return 0;
 }
