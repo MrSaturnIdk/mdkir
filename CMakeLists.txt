@@ -20,14 +20,20 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "CMake build type (what do you think)" FORCE)
 endif()
 message(STATUS "CMAKE_BUILD_TYPE is set to: ${CMAKE_BUILD_TYPE}")
-if(NOT DEFINED NEEDS_SUDO)
-    set(NEEDS_SUDO 1 CACHE STRING "If you need sudo to edit commands" FORCE)
+if(NOT DEFINED MDKIR_NEEDS_SUDO)
+    set(MDKIR_NEEDS_SUDO 1 CACHE STRING "If you need sudo to edit commands" FORCE)
+elseif(DEFINED NEEDS_SUDO)
+    message(DEPRECATION "This is deprecated, use 'MDKIR_NEEDS_SUDO' instead")
+    set(MDKIR_NEEDS_SUDO ${NEEDS_SUDO} CACHE STRING "If you need sudo to edit commands" FORCE)
 endif()
-message(STATUS "NEEDS_SUDO is set to: ${NEEDS_SUDO}")
-if(NOT CALL_NAME)
-    set(CALL_NAME mdkir CACHE STRING "What its called by to make it configure and not insult" FORCE)
+message(STATUS "MDKIR_NEEDS_SUDO is set to: ${MDKIR_NEEDS_SUDO}")
+if(CALL_NAME)
+    message(DEPRECATION "This is deprecated, use 'MDKIR_CALL_NAME' instead")
+    set(MDKIR_CALL_NAME "${CALL_NAME}" CACHE STRING "What its called by to make it configure and not insult" FORCE)
+elseif(NOT MDKIR_CALL_NAME)
+    set(MDKIR_CALL_NAME "mdkir" CACHE STRING "What its called by to make it configure and not insult" FORCE)
 endif()
-message(STATUS "CALL_NAME is set to: ${CALL_NAME}")
+message(STATUS "MDKIR_CALL_NAME is set to: ${MDKIR_CALL_NAME}")
 
 add_executable(mdkir
     src/array.c
@@ -36,16 +42,16 @@ add_executable(mdkir
 )
 target_include_directories(mdkir PRIVATE include)
 target_compile_definitions(mdkir PRIVATE
-    CALL_NAME="${CALL_NAME}"
+    CALL_NAME="${MDKIR_CALL_NAME}"
     HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
     PROJECT_VER="${PROJECT_VERSION}"
     BINDIR="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
-    NEEDS_SUDO="${NEEDS_SUDO}"
-    SYSCONFDIR="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir"
+    NEEDS_SUDO=${MDKIR_NEEDS_SUDO}
+    SYSCONFDIR="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}"
 )
 
 message(STATUS "Installing symlinks to: ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
-message(STATUS "Writing config to: ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}/mdkir")
+message(STATUS "Writing config to: ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}")
 
 install(TARGETS mdkir
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
