@@ -23,9 +23,9 @@
 extern const char* PROGRAM_NAME;
 extern int STDERR_TTY;
 extern int verbose;
+const char* COMMAND_LIST = SYSCONFDIR "/list";
 
 /// Internal
-static const char* COMMAND_LIST = SYSCONFDIR "/list";
 static int changeList(CommandList newList) {
     if (verbose) {
         printf("Opening list\n");

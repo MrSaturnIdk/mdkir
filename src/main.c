@@ -214,6 +214,36 @@ int main(int argc, char* argv[]) {
                             linkPath,
                             STDERR_TTY ? ANSI_RESET : ""
                         );
+                        int status = removeFromList(argv[i]);
+                        if (status) {
+                            fprintf(stderr, "%s: %swarning:%s %s%s in corrupted state%s\n",
+                                PROGRAM_NAME,
+                                STDERR_TTY ? ANSI_BOLD ANSI_MAGENTA : "",
+                                STDERR_TTY ? ANSI_RESET : "",
+                                STDERR_TTY ? ANSI_BOLD : "",
+                                COMMAND_LIST,
+                                STDERR_TTY ? ANSI_RESET : ""
+                            );
+                            fprintf(stderr, "%s: %snote:%s %splease remove item '%s'%s\n",
+                                PROGRAM_NAME,
+                                STDERR_TTY ? ANSI_BOLD ANSI_GRAY : "",
+                                STDERR_TTY ? ANSI_RESET : "",
+                                STDERR_TTY ? ANSI_BOLD : "",
+                                argv[i],
+                                STDERR_TTY ? ANSI_RESET : ""
+                            );
+                        }
+                        switch (status) {
+                            case -1: {
+                                return 2;
+                            }
+                            case -2: {
+                                return 4;
+                            }
+                            case 1: {
+                                return 1;
+                            }
+                        }
                         return 3;
                     }
                     if (verbose) {
@@ -264,6 +294,36 @@ int main(int argc, char* argv[]) {
                             linkPath,
                             STDERR_TTY ? ANSI_RESET : ""
                         );
+                        int status = addToList(argv[i]);
+                        if (status) {
+                            fprintf(stderr, "%s: %swarning:%s %s%s in corrupted state%s\n",
+                                PROGRAM_NAME,
+                                STDERR_TTY ? ANSI_BOLD ANSI_MAGENTA : "",
+                                STDERR_TTY ? ANSI_RESET : "",
+                                STDERR_TTY ? ANSI_BOLD : "",
+                                COMMAND_LIST,
+                                STDERR_TTY ? ANSI_RESET : ""
+                            );
+                            fprintf(stderr, "%s: %snote:%s %splease remove item '%s'%s\n",
+                                PROGRAM_NAME,
+                                STDERR_TTY ? ANSI_BOLD ANSI_GRAY : "",
+                                STDERR_TTY ? ANSI_RESET : "",
+                                STDERR_TTY ? ANSI_BOLD : "",
+                                argv[i],
+                                STDERR_TTY ? ANSI_RESET : ""
+                            );
+                        }
+                        switch (status) {
+                            case -1: {
+                                return 2;
+                            }
+                            case -2: {
+                                return 4;
+                            }
+                            case 1: {
+                                return 1;
+                            }
+                        }
                         return 3;
                     }
                     if (verbose) {

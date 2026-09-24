@@ -8,5 +8,6 @@
 
 #define ANSI_GRAY "\033[30m"
 #define ANSI_RED "\033[31m"
+#define ANSI_MAGENTA "\033[35m"
 
 #endif

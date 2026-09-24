@@ -9,6 +9,8 @@ typedef struct {
     intmax_t len;
 } CommandList;
 
+extern const char* COMMAND_LIST;
+
 CommandList getList(void);
 int listIncludes(const char* target);
 int addToList(char* item);
