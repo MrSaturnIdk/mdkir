@@ -64,7 +64,7 @@ static int changeList(CommandList newList) {
 
 /// Public
 CommandList getList(void) {
-    CommandList list = {.list = NULL, .allocated = NULL, .len = 0};
+    CommandList list = {0};
 
     // Open
     if (verbose) {
