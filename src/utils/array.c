@@ -3,7 +3,7 @@
  * I don't wanna clog my main file
  */
 
-#include "array.h"
+#include "utils/array.h"
 
 #include <assert.h>
 #include <stddef.h>

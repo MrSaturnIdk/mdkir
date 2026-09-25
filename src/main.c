@@ -2,8 +2,8 @@
  * Both config and insult
  */
 
-#include "ansicolors.h"
-#include "array.h"
+#include "utils/ansicolors.h"
+#include "utils/array.h"
 #include "list.h"
 
 #include <unistd.h>

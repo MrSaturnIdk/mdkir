@@ -9,8 +9,8 @@
 
 #include "list.h" // Pulls in CommandList
 
-#include "ansicolors.h"
-#include "array.h"
+#include "utils/ansicolors.h"
+#include "utils/array.h"
 
 #include <unistd.h>
 

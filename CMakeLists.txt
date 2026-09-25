@@ -63,7 +63,7 @@ message(STATUS "Installing symlinks to: ${MDKIR_BINDIR}")
 message(STATUS "Writing config to: ${MDKIR_CONFIGDIR}")
 
 add_executable(mdkir
-    src/array.c
+    src/utils/array.c
     src/list.c
     src/main.c
 )
