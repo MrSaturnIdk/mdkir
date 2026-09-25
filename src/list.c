@@ -165,7 +165,7 @@ int listIncludes(const char* target) {
     free(list.list);
     return 0;
 }
-int addToList(char* item) {
+int addToList(const char* item) {
     if (strchr(item, ' ') || strchr(item, '\t') || strchr(item, '\n')) {
         fprintf(stderr, "%s: %serror:%s %sitem '%s' contains whitespace%s\n",
             PROGRAM_NAME,
@@ -203,7 +203,7 @@ int addToList(char* item) {
     if (!list.list) {
         return list.len;
     }
-    list.list[list.len] = item;
+    list.list[list.len] = (char*)item;
     ++list.len;
 
     int changed = changeList(list);
