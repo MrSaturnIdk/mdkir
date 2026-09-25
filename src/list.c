@@ -11,6 +11,7 @@
 
 #include "utils/ansicolors.h"
 #include "utils/array.h"
+#include "utils/string.h"
 
 #include <unistd.h>
 
@@ -166,7 +167,7 @@ int listIncludes(const char* target) {
     return 0;
 }
 int addToList(const char* item) {
-    if (strchr(item, ' ') || strchr(item, '\t') || strchr(item, '\n')) {
+    if (hasspace(item)) {
         fprintf(stderr, "%s: %serror:%s %sitem '%s' contains whitespace%s\n",
             PROGRAM_NAME,
             STDERR_TTY ? ANSI_BOLD ANSI_RED : "",

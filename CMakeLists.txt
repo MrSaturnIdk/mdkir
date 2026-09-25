@@ -64,6 +64,7 @@ message(STATUS "Writing config to: ${MDKIR_CONFIGDIR}")
 
 add_executable(mdkir
     src/utils/array.c
+    src/utils/string.c
     src/list.c
     src/main.c
 )
