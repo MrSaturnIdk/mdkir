@@ -76,6 +76,9 @@ target_compile_definitions(mdkir PRIVATE
     NEEDS_SUDO=${MDKIR_NEEDS_SUDO}
     SYSCONFDIR="${MDKIR_CONFIGDIR}"
 )
+set_target_properties(mdkir PROPERTIES
+    OUTPUT_NAME "${MDKIR_CALL_NAME}"
+)
 
 install(TARGETS mdkir
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
