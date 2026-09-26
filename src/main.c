@@ -252,7 +252,10 @@ int main(int argc, char* argv[]) {
                     }
                     printf("Command '%s' added successfully\n", argv[i]);
 
-                    return 0;
+                    if (i == argc - 1) {
+                        return 0;
+                    }
+                    break;
                 }
                 case 1: {
                     if (NEEDS_SUDO && geteuid()) {
@@ -332,7 +335,10 @@ int main(int argc, char* argv[]) {
                     }
                     printf("Command '%s' removed successfully\n", argv[i]);
 
-                    return 0;
+                    if (i == argc - 1) {
+                        return 0;
+                    }
+                    break;
                 }
             }
         }
