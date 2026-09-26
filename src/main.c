@@ -32,11 +32,11 @@ int main(int argc, char* argv[]) {
         callName = start + 1;
     }
     if (strcmp(callName, CALL_NAME)) {
-        printf("That's %snot%s how it's spelled\n",
+        fprintf(stderr, "That's %snot%s how it's spelled\n",
             STDERR_TTY ? ANSI_BOLD : "",
             STDERR_TTY ? ANSI_RESET : ""
         );
-        return 0;
+        return 127;
     }
 
     if (argc == 1 || argc == 2 && !strcmp(argv[1], "--verbose")) {
