@@ -15,6 +15,7 @@
 
 #include <unistd.h>
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -147,6 +148,13 @@ CommandList getList(void) {
     list.allocated = items;
     return list;
 }
+void closeList(CommandList *list) {
+    assert(list);
+
+    free(list->list);
+    free(list->allocated);
+    *list = (CommandList){0};
+}
 
 int listIncludes(const char* target) {
     CommandList list = getList();
@@ -158,12 +166,10 @@ int listIncludes(const char* target) {
         fflush(stdout);
     }
     if (findIndexOfString((const char**)list.list, 4096, target) != -1) {
-        free(list.allocated);
-        free(list.list);
+        closeList(&list);
         return 1;
     }
-    free(list.allocated);
-    free(list.list);
+    closeList(&list);
     return 0;
 }
 int addToList(const char* item) {
@@ -209,16 +215,12 @@ int addToList(const char* item) {
 
     int changed = changeList(list);
     if (changed) {
-        free(list.allocated);
-        free(list.list);
         return changed;
     }
     if (verbose) {
         printf("Item '%s' added successfully\n", item);
         fflush(stdout);
     }
-    free(list.allocated);
-    free(list.list);
     return 0;
 }
 int removeFromList(const char* item) {
@@ -251,15 +253,13 @@ int removeFromList(const char* item) {
 
     int changed = changeList(list);
     if (changed) {
-        free(list.allocated);
-        free(list.list);
+        closeList(&list);
         return changed;
     }
     if (verbose) {
         printf("Item '%s' removed successfully\n", item);
         fflush(stdout);
     }
-    free(list.allocated);
-    free(list.list);
+    closeList(&list);
     return 0;
 }

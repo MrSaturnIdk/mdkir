@@ -12,6 +12,7 @@ typedef struct {
 extern const char* COMMAND_LIST;
 
 CommandList getList(void);
+void closeList(CommandList *list);
 int listIncludes(const char* target);
 int addToList(const char* item);
 int removeFromList(const char* item);
