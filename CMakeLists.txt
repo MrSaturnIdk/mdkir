@@ -51,6 +51,10 @@ if("${MDKIR_CALL_NAME}" MATCHES "[ ${CH_FF}\n\r\t${CH_VT}]")
     message(SEND_ERROR "MDKIR_CALL_NAME cannot contain whitespace")
 endif()
 message(STATUS "MDKIR_CALL_NAME is set to: ${MDKIR_CALL_NAME}")
+if(NOT MDKIR_INSULT)
+    set(MDKIR_INSULT "That's not how it's spelled dummy" CACHE STRING "The insult message" FORCE)
+endif()
+message(STATUS "MDKIR_INSULT is set to: ${MDKIR_INSULT}")
 if(MDKIR_DEBUG)
     set(MDKIR_BINDIR "${CMAKE_BINARY_DIR}")
     set(MDKIR_CONFIGDIR "${CMAKE_BINARY_DIR}")
@@ -73,6 +77,7 @@ target_compile_definitions(mdkir PRIVATE
     CALL_NAME="${MDKIR_CALL_NAME}"
     HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
     PROJECT_VER="${PROJECT_VERSION}"
+    INSULT_MESSAGE="${MDKIR_INSULT}"
     BINDIR="${MDKIR_BINDIR}"
     NEEDS_SUDO=${MDKIR_NEEDS_SUDO}
     SYSCONFDIR="${MDKIR_CONFIGDIR}"

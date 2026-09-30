@@ -32,10 +32,7 @@ int main(int argc, char* argv[]) {
         callName = start + 1;
     }
     if (strcmp(callName, CALL_NAME)) {
-        fprintf(stderr, "That's %snot%s how it's spelled\n",
-            STDERR_TTY ? ANSI_BOLD : "",
-            STDERR_TTY ? ANSI_RESET : ""
-        );
+        fprintf(stderr, INSULT_MESSAGE "\n");
         return 127;
     }
 
