@@ -159,7 +159,7 @@ void closeList(CommandList *list) {
 int listIncludes(const char* target) {
     CommandList list = getList();
     if (!list.list) {
-        return list.len;
+        return (int)list.len;
     }
     if (verbose) {
         printf("Checking if list contains '%s'\n", target);
@@ -208,7 +208,7 @@ int addToList(const char* item) {
 
     CommandList list = getList();
     if (!list.list) {
-        return list.len;
+        return (int)list.len;
     }
     list.list[list.len] = (char*)item;
     ++list.len;
@@ -247,9 +247,9 @@ int removeFromList(const char* item) {
 
     CommandList list = getList();
     if (!list.list) {
-        return list.len;
+        return (int)list.len;
     }
-    list.list[findIndexOfString((const char**)list.list, list.len, item)] = "";
+    list.list[findIndexOfString((const char**)list.list, (size_t)list.len, item)] = "";
 
     int changed = changeList(list);
     if (changed) {
