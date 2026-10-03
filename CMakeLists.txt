@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(mdkir
-    VERSION 1.3.0
+    VERSION 1.3.1
     DESCRIPTION "The Unix (MacOS/Linux) program that insults you for misspelling a command"
     HOMEPAGE_URL "https://github.com/MrSaturnIdk/mdkir"
     LANGUAGES C
