@@ -107,7 +107,7 @@ CommandList getList(void) {
     }
     size_t totalRead = fread(items, 1, 4095, listFile);
     items[totalRead] = '\0';
-    if (ferror(listFile) || totalRead == 4095 && !feof(listFile)) {
+    if (ferror(listFile) || (totalRead == 4095 && !feof(listFile))) {
         fprintf(stderr,  "%s: %serror:%s %sfailed to read %s%s\n",
             PROGRAM_NAME,
             STDERR_TTY ? ANSI_BOLD ANSI_RED : "",

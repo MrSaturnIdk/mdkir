@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
         return 127;
     }
 
-    if (argc == 1 || argc == 2 && !strcmp(argv[1], "--verbose")) {
+    if (argc == 1 || (argc == 2 && !strcmp(argv[1], "--verbose"))) {
         fprintf(stderr, "%s: %serror:%s %sno commands given%s\n",
             PROGRAM_NAME,
             STDERR_TTY ? ANSI_BOLD ANSI_RED : "",
