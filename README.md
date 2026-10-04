@@ -17,6 +17,11 @@ Just run
 ```sh
 mdkir --help
 ```
+## Runtime configurations
+> [!TIP]
+> Precedence is in order listed
+- `~/.mdkirrc`: Contains a custom insult
+- `~/.config/mdkir/insult`: Contains a custom insult
 ## Configure time customizations
 - `-DMDKIR_CALL_NAME=mdkir`: Since mdkir relies on how its called to know if it should insult or configure,
 you must pass a custom name if you wish to rename it.
