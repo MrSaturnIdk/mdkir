@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
         callName = start + 1;
     }
     if (strcmp(callName, CALL_NAME)) {
-        fprintf(stderr, INSULT_MESSAGE "\n");
+        fprintf(stderr, "%s\n", INSULT_MESSAGE );
         return 127;
     }
 
