@@ -21,6 +21,7 @@ int verbose = 0;
  * 2 = I/O fail
  * 3 = Filesystem fail
  * 4 = Memory fail
+ * 5 = Environment fail
  */
 int main(int argc, char* argv[]) {
     PROGRAM_NAME = argv[0];
@@ -32,6 +33,73 @@ int main(int argc, char* argv[]) {
         callName = start + 1;
     }
     if (strcmp(callName, CALL_NAME)) {
+        // Use ~/.mdkirrc first
+        char rcPath[4096] = "";
+        const char* home = getenv("HOME");
+        if (!home || !*home) {
+            fprintf(stderr, "%s: %serror:%s %senvironment variable '$HOME' undefined or empty%s\n",
+                PROGRAM_NAME,
+                STDERR_TTY ? ANSI_BOLD ANSI_RED : "",
+                STDERR_TTY ? ANSI_RESET : "",
+                STDERR_TTY ? ANSI_BOLD : "",
+                STDERR_TTY ? ANSI_RESET : ""
+            );
+            return 5;
+        }
+        snprintf(rcPath, sizeof(rcPath), "%s/.mdkirrc", home);
+        FILE* rc = fopen(rcPath, "r");
+        if (rc) {
+           char insultMessage[4096] = "";
+           size_t totalRead = fread(insultMessage, 1, sizeof(insultMessage) - 1, rc);
+           insultMessage[totalRead] = '\0';
+           if (ferror(rc) || (totalRead == sizeof(insultMessage) - 1 && !feof(rc))) {
+               fprintf(stderr,  "%s: %serror:%s %sfailed to read %s%s\n",
+                   PROGRAM_NAME,
+                   STDERR_TTY ? ANSI_BOLD ANSI_RED : "",
+                   STDERR_TTY ? ANSI_RESET : "",
+                   STDERR_TTY ? ANSI_BOLD : "",
+                   rcPath,
+                   STDERR_TTY ? ANSI_RESET : ""
+               );
+               fclose(rc);
+               return 2;
+           }
+           fprintf(stderr, "%s", insultMessage);
+           fclose(rc);
+           return 127;
+        }
+
+        // Use ~/.config/mdkir/insult
+        char insultPath[4096] = "";
+        const char* xdgConfigHome = getenv("XDG_CONFIG_HOME");
+        if (xdgConfigHome && *xdgConfigHome) {
+            snprintf(insultPath, sizeof(insultPath), "%s/mdkir/insult", xdgConfigHome);
+        } else {
+            snprintf(insultPath, sizeof(insultPath), "%s/.config/mdkir/insult", home);
+        }
+        FILE* insult = fopen(insultPath, "r");
+        if (insult) {
+           char insultMessage[4096] = "";
+           size_t totalRead = fread(insultMessage, 1, sizeof(insultMessage) - 1, insult);
+           insultMessage[totalRead] = '\0';
+           if (ferror(insult) || (totalRead == sizeof(insultMessage) - 1 && !feof(insult))) {
+               fprintf(stderr,  "%s: %serror:%s %sfailed to read %s%s\n",
+                   PROGRAM_NAME,
+                   STDERR_TTY ? ANSI_BOLD ANSI_RED : "",
+                   STDERR_TTY ? ANSI_RESET : "",
+                   STDERR_TTY ? ANSI_BOLD : "",
+                   insultPath,
+                   STDERR_TTY ? ANSI_RESET : ""
+               );
+               fclose(insult);
+               return 2;
+           }
+           fprintf(stderr, "%s", insultMessage);
+           fclose(insult);
+           return 127;
+        }
+
+        // Use the configure-time defined one
         fprintf(stderr, "%s\n", INSULT_MESSAGE );
         return 127;
     }
