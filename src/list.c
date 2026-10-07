@@ -116,6 +116,7 @@ CommandList getList(void) {
             COMMAND_LIST,
             STDERR_TTY ? ANSI_RESET : ""
         );
+        free(items);
         fclose(listFile);
         list.len = -2;
         return list;
@@ -132,6 +133,7 @@ CommandList getList(void) {
             STDERR_TTY ? ANSI_BOLD : "",
             STDERR_TTY ? ANSI_RESET : ""
         );
+        free(items);
         list.len = -2;
         return list;
     }
