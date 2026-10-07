@@ -59,7 +59,18 @@ static int changeList(CommandList newList) {
         strncat(catList, "\n", sizeof(catList) - size - 1);
     }
 
-    fprintf(list, "%s", catList);
+    size_t size = strlen(catList);
+    size_t written = fwrite(catList, size, 1, list);
+    if (!written) {
+        fprintf(stderr,  "%s: %serror:%s %sfailed to write to %s%s\n",
+            PROGRAM_NAME,
+            STDERR_TTY ? ANSI_BOLD ANSI_RED : "",
+            STDERR_TTY ? ANSI_RESET : "",
+            STDERR_TTY ? ANSI_BOLD : "",
+            COMMAND_LIST,
+            STDERR_TTY ? ANSI_RESET : ""
+        );
+    }
     fclose(list);
     return 0;
 }
