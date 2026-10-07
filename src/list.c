@@ -105,7 +105,7 @@ CommandList getList(void) {
         list.len = -2;
         return list;
     }
-    size_t totalRead = fread(items, 1, 4095, listFile);
+    size_t totalRead = fread(items, sizeof(items[0]), 4095, listFile);
     items[totalRead] = '\0';
     if (ferror(listFile) || (totalRead == 4095 && !feof(listFile))) {
         fprintf(stderr,  "%s: %serror:%s %sfailed to read %s%s\n",
