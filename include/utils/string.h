@@ -1,7 +1,7 @@
 /// Little string helper, header edition
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef UTILS_STRING_H
+#define UTILS_STRING_H
 
 int hasspace(const char* str);
 
